@@ -8,6 +8,8 @@ Jump on enemy head to create jump boost using power up code
 Randomize jump sound
 Add fake platforms that don't allow you to land on them.
 Add a cactus that will kill the player if he collides with it
+Change the mobs from the flying machines to the female bunny
+
 
 **********Bugs
 when you get launched by powerup or head jump player sometimes snaps to platform abruptly 
