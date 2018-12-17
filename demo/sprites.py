@@ -189,6 +189,8 @@ class Platform(Sprite):
         self.rect.y = y
         if random.randrange(100) < POW_SPAWN_PCT:
             Pow(self.game, self)
+        if randrange(100) < CACTUS_SPAWN_PCT:
+            Cactus(self.game, self)
 class Pow(Sprite):
     def __init__(self, game, plat):
         # allows layering in LayeredUpdates sprite group
@@ -218,9 +220,10 @@ class Mob(Sprite):
         self.groups = game.all_sprites, game.mobs
         Sprite.__init__(self, self.groups)
         self.game = game
-        self.image_up = self.game.spritesheet.get_image(566, 510, 122, 139)
+        #changed the mobs from the flying machines to the female bunny
+        self.image_up = self.game.spritesheet.get_image(581, 1265, 121, 191)
         self.image_up.set_colorkey(BLACK)
-        self.image_down = self.game.spritesheet.get_image(568, 1534, 122, 135)
+        self.image_down = self.game.spritesheet.get_image(416, 1660, 150, 181)
         self.image_down.set_colorkey(BLACK)
         self.image = self.image_up
         self.image.set_colorkey(BLACK)
@@ -252,18 +255,15 @@ class Mob(Sprite):
         if self.rect.left > WIDTH + 100 or self.rect.right < -100:
             self.kill()
 class Cactus(Sprite):
-
     def __init__(self, game, plat):
         # allows layering in LayeredUpdates sprite group
         self._layer = POW_LAYER
         # add a groups property where we can pass all instances of this object into game groups
-        self.groups = game.all_sprites, game.powerups
+        self.groups = game.all_sprites, game.cacti
         Sprite.__init__(self, self.groups)
         self.game = game
         self.plat = plat
-        self.type = random.choice(['kill'])
-        #changed the blue particle powerup to be a cactus
-        self.image = self.game.spritesheet.get_image(707, 134, 117, 160)
+        self.image = self.game.spritesheet.get_image(707,134,117,160)
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = self.plat.rect.centerx

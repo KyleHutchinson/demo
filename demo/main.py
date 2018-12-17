@@ -9,11 +9,16 @@ Curious, Creative, Tenacious(requires hopefulness)
 Jump on enemy head to create jump boost using power up code
 Randomize jump sound
 Add fake platforms that don't allow you to land on them.
+Add a cactus that will kill the player if he collides with it
+Change the mob timer so that more mobs spawn in 
+Change the length of platforms so you don't get stuck waiting for a mob to spawn higher.
 
 **********Bugs
 when you get launched by powerup or head jump player sometimes snaps to platform abruptly 
 happens when hitting jump during power up boostd
 Sometimes the real platforms get hidden behind the fake platforms so you can't actually tell if there is a platform there or not.
+For some reason my cactus won't spawn into the game. (I copied your code from github but it won't spawn for me)
+Sometimes after using a powerup the player collides with the bottom of the platform causing him to fall.
 
 **********Gameplay fixes
 Platform randomness leaves player in limbo for extended periods
@@ -22,9 +27,8 @@ Lower spawn location so player can get out of random stuck situations
 **********Features
 Powerup that lets you jump higher when you collide with the powerup
 Fake platforms that don't allow you to actually land on them
-
-
 '''
+
 import pygame as pg
 import random
 from settings import *
@@ -89,10 +93,8 @@ class Game:
         self.clouds = pg.sprite.Group()
         # add powerups
         self.powerups = pg.sprite.Group()
-        #add cactus timer
-        self.cactus_timer = 0
         # add cactus
-        self.cactus = pg.sprite.Group()
+        self.cacti = pg.sprite.Group()
         
         self.mob_timer = 0
         # add a player 1 to the group
@@ -138,7 +140,8 @@ class Game:
         
         # shall we spawn a mob?
         now = pg.time.get_ticks()
-        if now - self.mob_timer > 5000 + random.choice([-1000, -500, 0, 500, 1000]):
+        #changed mob timer from 5000 to 2000 so more mobs spawn in
+        if now - self.mob_timer > 2000 + random.choice([-1000, -500, 0, 500, 1000]):
             self.mob_timer = now
             Mob(self)
         ##### check for mob collisions ######
@@ -187,6 +190,9 @@ class Game:
             # creates slight scroll at the top based on player y velocity
             # scroll plats with player
             
+            for cactus in self.cacti:
+                cactus.rect.x -= self.player.vel.x
+            
             for mob in self.mobs:
                 # creates slight scroll based on player y velocity
                 mob.rect.y += max(abs(self.player.vel.y), 2)
@@ -203,6 +209,7 @@ class Game:
                 fake.rect.y += max(abs(self.player.vel.y), 2)
                 if fake.rect.top >= HEIGHT + 40:
                     fake.kill()
+                    #removed the add score of 10 because these are fake platforms and not real platforms.
                     self.score += 10
 
         # if player hits a power up
@@ -212,6 +219,12 @@ class Game:
                 self.boost_sound.play()
                 self.player.vel.y = -BOOST_POWER
                 self.player.jumping = False
+        cacti_hits = pg.sprite.spritecollide(self.player, self.cacti, False)
+        if cacti_hits:    
+            if self.player.vel.y > 0 and self.player.pos.y > cacti_hits[0].rect.top:
+                    print("falling")
+                    print("player is " + str(self.player.pos.y))
+                    print("mob is " + str(cacti_hits[0].rect.top))
         
         # Die!
         if self.player.rect.bottom > HEIGHT:
@@ -224,7 +237,8 @@ class Game:
         if len(self.platforms) == 0:
             self.playing = False
         # generate new random platforms
-        while len(self.platforms) < 6:
+        #changed the range from 6 to 8 so that player isn't stuck waiting for a mob to spawn to jump higher
+        while len(self.platforms) < 8:
             width = random.randrange(50, 100)
             ''' removed widths and height params to allow for sprites '''
             """ changed due to passing into groups through sprites lib file """
@@ -279,7 +293,7 @@ class Game:
         """ # game splash screen """
         self.screen.fill(BLACK)
         self.draw_text(TITLE, 48, WHITE, WIDTH/2, HEIGHT/4)
-        self.draw_text("WASD to move, Space to jump", 22, WHITE, WIDTH/2, HEIGHT/2)
+        self.draw_text("WASD to move", 22, WHITE, WIDTH/2, HEIGHT/2)
         self.draw_text("Press any key to play...", 22, WHITE, WIDTH / 2, HEIGHT * 3/4)
         self.draw_text("High score " + str(self.highscore), 22, WHITE, WIDTH / 2, 15)
         pg.display.flip()

@@ -1,4 +1,5 @@
-TITLE = "jumpy"
+#change title from jumpy to Jump Higher
+TITLE = "Jump Higher"
 # screen dims
 WIDTH = 480
 HEIGHT = 600
@@ -22,6 +23,7 @@ PLAYER_JUMP = 20
 # game settings
 BOOST_POWER = 60
 POW_SPAWN_PCT = 7
+CACTUS_SPAWN_PCT = 7
 MOB_FREQ = 500
 # layers - uses numerical value in layered sprites
 PLAYER_LAYER = 2
