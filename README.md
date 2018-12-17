@@ -15,7 +15,6 @@ Change the mobs from the flying machines to the female bunny
 when you get launched by powerup or head jump player sometimes snaps to platform abruptly 
 happens when hitting jump during power up boostd
 Sometimes the real platforms get hidden behind the fake platforms so you can't actually tell if there is a platform there or not.
-For some reason my cactus won't spawn into the game. (I copied your code from github but it won't spawn for me)
 
 **********Gameplay fixes
 Platform randomness leaves player in limbo for extended periods
